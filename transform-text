@@ -1,0 +1,25 @@
+#!/usr/bin/env fish
+
+
+function transformFile -a f
+  for i in seq 9
+    set MATCH (rg --max-count 1 --only-matching --no-line-number $PATTERN $f)
+    test $status -eq 0; or return
+    set REPLACEMENT (echo $MATCH | sd $FIND $REPLACE)
+    sd -s $MATCH $REPLACEMENT $f
+  end
+end
+
+
+
+
+set PATTERN $argv[1]
+set FIND $argv[2]
+set REPLACE $argv[3]
+set DIR (set -q argv[4]; and echo $argv[4]; or echo $PWD)
+
+set MATCHED_FILES (rg --files-with-matches $PATTERN $DIR)
+
+for f in $MATCHED_FILES
+  transformFile $f
+end
