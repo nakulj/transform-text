@@ -2,7 +2,7 @@
 
 
 function transformFile -a f
-  for i in seq 9
+  while true
     set MATCH (rg --max-count 1 --only-matching --no-line-number $PATTERN $f)
     test $status -eq 0; or return
     set REPLACEMENT (echo $MATCH | sd $FIND $REPLACE)
